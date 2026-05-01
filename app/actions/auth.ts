@@ -9,8 +9,7 @@ const registerSchema = z.object({
   username: z
     .string()
     .min(3, 'At least 3 characters')
-    .max(20, 'At most 20 characters')
-    .regex(/^[a-zA-Z0-9_]+$/, 'Only letters, numbers, and underscores'),
+    .max(20, 'At most 20 characters'),
   password: z.string().min(8, 'At least 8 characters'),
 })
 
