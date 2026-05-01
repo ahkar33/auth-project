@@ -21,12 +21,18 @@ export default function RegisterPage() {
 
   if (state.success) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="w-full max-w-sm text-center">
-          <h1 className="font-[family-name:var(--font-playfair)] text-2xl text-[var(--text)] mb-3">
+      <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-[var(--accent)] opacity-[0.04] blur-[100px] pointer-events-none" />
+        <div className="w-full max-w-sm text-center relative z-10">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] flex items-center justify-center mx-auto mb-6" style={{ boxShadow: '0 8px 32px var(--accent-glow)' }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <h1 className="font-[family-name:var(--font-syne)] text-2xl font-bold text-[var(--text)] mb-3">
             Account created
           </h1>
-          <p className="text-sm text-[var(--muted)] leading-relaxed mb-6">
+          <p className="text-sm text-[var(--muted)] leading-relaxed mb-8">
             {state.message}
           </p>
           <Link href="/login" className="btn-primary inline-block" style={{ textDecoration: 'none' }}>
@@ -38,20 +44,30 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-[var(--accent)] opacity-[0.04] blur-[100px] pointer-events-none" />
 
-        <div className="mb-8 text-center">
-          <p className="text-xs tracking-[0.25em] uppercase text-[var(--muted)] mb-3">Auth</p>
-          <h1 className="font-[family-name:var(--font-playfair)] text-3xl text-[var(--text)]">
-            Create Account
-          </h1>
+      <div className="w-full max-w-sm relative z-10">
+        <div className="mb-10 flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] flex items-center justify-center" style={{ boxShadow: '0 4px 20px var(--accent-glow)' }}>
+            <div className="w-3 h-3 rounded-[3px] bg-white/90" />
+          </div>
+          <span className="font-[family-name:var(--font-syne)] text-sm font-bold tracking-widest text-[var(--text)] uppercase">
+            Auth
+          </span>
         </div>
 
-        <div className="bg-[var(--surface)] border border-[var(--border)] p-8 shadow-sm">
+        <h1 className="font-[family-name:var(--font-syne)] text-2xl font-bold text-[var(--text)] mb-1.5">
+          Create account
+        </h1>
+        <p className="text-sm text-[var(--muted)] mb-8">
+          Get started in seconds
+        </p>
+
+        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-7">
           <form action={formAction} className="flex flex-col gap-5">
             <div>
-              <label className="block text-[0.65rem] tracking-[0.15em] uppercase text-[var(--muted)] mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
                 Email
               </label>
               <input
@@ -64,12 +80,12 @@ export default function RegisterPage() {
                 onChange={e => setEmail(e.target.value)}
               />
               {state.errors?.email && (
-                <p className="mt-1 text-[0.65rem] text-[var(--error)]">{state.errors.email[0]}</p>
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.email[0]}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-[0.65rem] tracking-[0.15em] uppercase text-[var(--muted)] mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
                 Username
               </label>
               <input
@@ -82,12 +98,12 @@ export default function RegisterPage() {
                 onChange={e => setUsername(e.target.value)}
               />
               {state.errors?.username && (
-                <p className="mt-1 text-[0.65rem] text-[var(--error)]">{state.errors.username[0]}</p>
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.username[0]}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-[0.65rem] tracking-[0.2em] uppercase text-[var(--muted)] mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
                 Password
               </label>
               <input
@@ -100,23 +116,22 @@ export default function RegisterPage() {
                 onChange={e => setPassword(e.target.value)}
               />
               {state.errors?.password && (
-                <p className="mt-1 text-[0.65rem] text-[var(--error)]">{state.errors.password[0]}</p>
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.password[0]}</p>
               )}
             </div>
 
-            <button type="submit" disabled={pending} className="btn-primary mt-1">
+            <button type="submit" disabled={pending} className="btn-primary mt-2">
               {pending ? 'Creating account…' : 'Create Account'}
             </button>
           </form>
         </div>
 
-        <p className="mt-5 text-center text-xs text-[var(--muted)]">
+        <p className="mt-6 text-center text-sm text-[var(--muted)]">
           Already have an account?{' '}
-          <Link href="/login" className="text-[var(--text)] underline underline-offset-2 hover:opacity-60 transition-opacity">
+          <Link href="/login" className="text-[var(--accent)] hover:opacity-80 transition-opacity font-medium">
             Sign in
           </Link>
         </p>
-
       </div>
     </div>
   )

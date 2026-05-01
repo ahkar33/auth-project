@@ -19,20 +19,30 @@ export default function LoginPage() {
   }, [state])
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-[var(--accent)] opacity-[0.04] blur-[100px] pointer-events-none" />
 
-        <div className="mb-8 text-center">
-          <p className="text-xs tracking-[0.25em] uppercase text-[var(--muted)] mb-3">Auth</p>
-          <h1 className="font-[family-name:var(--font-playfair)] text-3xl text-[var(--text)]">
-            Sign In
-          </h1>
+      <div className="w-full max-w-sm relative z-10">
+        <div className="mb-10 flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] flex items-center justify-center shadow-lg" style={{ boxShadow: '0 4px 20px var(--accent-glow)' }}>
+            <div className="w-3 h-3 rounded-[3px] bg-white/90" />
+          </div>
+          <span className="font-[family-name:var(--font-syne)] text-sm font-bold tracking-widest text-[var(--text)] uppercase">
+            Auth
+          </span>
         </div>
 
-        <div className="bg-[var(--surface)] border border-[var(--border)] p-8 shadow-sm">
+        <h1 className="font-[family-name:var(--font-syne)] text-2xl font-bold text-[var(--text)] mb-1.5">
+          Welcome back
+        </h1>
+        <p className="text-sm text-[var(--muted)] mb-8">
+          Sign in to continue
+        </p>
+
+        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-7">
           <form action={formAction} className="flex flex-col gap-5">
             <div>
-              <label className="block text-[0.65rem] tracking-[0.15em] uppercase text-[var(--muted)] mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
                 Email
               </label>
               <input
@@ -45,12 +55,12 @@ export default function LoginPage() {
                 onChange={e => setEmail(e.target.value)}
               />
               {state.errors?.email && (
-                <p className="mt-1 text-[0.65rem] text-[var(--error)]">{state.errors.email[0]}</p>
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.email[0]}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-[0.65rem] tracking-[0.15em] uppercase text-[var(--muted)] mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
                 Password
               </label>
               <input
@@ -63,23 +73,22 @@ export default function LoginPage() {
                 onChange={e => setPassword(e.target.value)}
               />
               {state.errors?.password && (
-                <p className="mt-1 text-[0.65rem] text-[var(--error)]">{state.errors.password[0]}</p>
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.password[0]}</p>
               )}
             </div>
 
-            <button type="submit" disabled={pending} className="btn-primary mt-1">
-              {pending ? 'Signing in…' : 'Sign In'}
+            <button type="submit" disabled={pending} className="btn-primary mt-2">
+              {pending ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
         </div>
 
-        <p className="mt-5 text-center text-xs text-[var(--muted)]">
+        <p className="mt-6 text-center text-sm text-[var(--muted)]">
           No account?{' '}
-          <Link href="/register" className="text-[var(--text)] underline underline-offset-2 hover:opacity-60 transition-opacity">
+          <Link href="/register" className="text-[var(--accent)] hover:opacity-80 transition-opacity font-medium">
             Create one
           </Link>
         </p>
-
       </div>
     </div>
   )

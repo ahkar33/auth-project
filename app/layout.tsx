@@ -1,18 +1,18 @@
 import type { Metadata } from 'next'
-import { DM_Mono, Playfair_Display } from 'next/font/google'
+import { Syne, Outfit } from 'next/font/google'
 import { Toaster } from 'sonner'
 import './globals.css'
 
-const dmMono = DM_Mono({
-  variable: '--font-dm-mono',
+const syne = Syne({
+  variable: '--font-syne',
   subsets: ['latin'],
-  weight: ['300', '400', '500'],
+  weight: ['400', '500', '600', '700', '800'],
 })
 
-const playfair = Playfair_Display({
-  variable: '--font-playfair',
+const outfit = Outfit({
+  variable: '--font-outfit',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600'],
 })
 
 export const metadata: Metadata = {
@@ -22,19 +22,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${dmMono.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${syne.variable} ${outfit.variable}`}>
       <body>
         {children}
         <Toaster
-          theme="light"
+          theme="dark"
           toastOptions={{
             style: {
-              background: '#FFFFFF',
-              border: '1px solid #E4DDD4',
-              color: '#1C1917',
-              fontFamily: 'var(--font-dm-mono)',
-              fontSize: '0.8rem',
-              letterSpacing: '0.02em',
+              background: '#0C1220',
+              border: '1px solid #1A2640',
+              color: '#DDE6F5',
+              fontFamily: 'var(--font-outfit)',
+              fontSize: '0.85rem',
+              letterSpacing: '0.01em',
             },
           }}
         />
