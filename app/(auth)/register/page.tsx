@@ -9,9 +9,12 @@ const initial: AuthState = {}
 
 export default function RegisterPage() {
   const [state, formAction, pending] = useActionState(register, initial)
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [pass, setPass] = useState('')
+  const [rePass, setRePass] = useState('')
+  const [contact, setContact] = useState('')
+  const [agreed, setAgreed] = useState(false)
 
   useEffect(() => {
     if (state.errors?.form) {
@@ -68,7 +71,25 @@ export default function RegisterPage() {
           <form action={formAction} className="flex flex-col gap-5">
             <div>
               <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
-                Email
+                Your Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="field-input"
+                placeholder="John Doe"
+                autoComplete="name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
+              {state.errors?.name && (
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.name[0]}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
+                Your Email
               </label>
               <input
                 type="email"
@@ -86,39 +107,77 @@ export default function RegisterPage() {
 
             <div>
               <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
-                Username
+                Password
               </label>
               <input
-                type="text"
-                name="username"
+                type="password"
+                name="pass"
                 className="field-input"
-                placeholder="your_handle"
-                autoComplete="username"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
+                placeholder="min. 8 characters"
+                autoComplete="new-password"
+                value={pass}
+                onChange={e => setPass(e.target.value)}
               />
-              {state.errors?.username && (
-                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.username[0]}</p>
+              {state.errors?.pass && (
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.pass[0]}</p>
               )}
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
-                Password
+                Repeat your password
               </label>
               <input
                 type="password"
-                name="password"
+                name="re_pass"
                 className="field-input"
-                placeholder="min. 8 characters"
+                placeholder="••••••••"
                 autoComplete="new-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                value={rePass}
+                onChange={e => setRePass(e.target.value)}
               />
-              {state.errors?.password && (
-                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.password[0]}</p>
+              {state.errors?.re_pass && (
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.re_pass[0]}</p>
               )}
             </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
+                Contact no
+              </label>
+              <input
+                type="text"
+                name="contact"
+                className="field-input"
+                placeholder="+1 234 567 8900"
+                autoComplete="tel"
+                value={contact}
+                onChange={e => setContact(e.target.value)}
+              />
+              {state.errors?.contact && (
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.contact[0]}</p>
+              )}
+            </div>
+
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="agree-term"
+                name="agree-term"
+                checked={agreed}
+                onChange={e => setAgreed(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border border-[var(--border)] bg-transparent accent-[var(--accent)] cursor-pointer"
+              />
+              <label htmlFor="agree-term" className="text-xs text-[var(--muted)] leading-relaxed cursor-pointer">
+                I agree to the{' '}
+                <span className="text-[var(--accent)] hover:opacity-80 transition-opacity">
+                  Terms of Service
+                </span>
+              </label>
+            </div>
+            {state.errors?.['agree-term'] && (
+              <p className="-mt-3 text-xs text-[var(--error)]">{state.errors['agree-term'][0]}</p>
+            )}
 
             <button type="submit" disabled={pending} className="btn-primary mt-2">
               {pending ? 'Creating account…' : 'Create Account'}

@@ -4,17 +4,22 @@ import { z, flattenError } from 'zod'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-const registerSchema = z.object({
-  email: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email address'),
-  username: z
-    .string()
-    .min(3, 'At least 3 characters')
-    .max(20, 'At most 20 characters'),
-  password: z.string().min(8, 'At least 8 characters'),
-})
+const registerSchema = z
+  .object({
+    name: z.string().min(2, 'At least 2 characters').max(50, 'At most 50 characters'),
+    email: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email address'),
+    pass: z.string().min(8, 'At least 8 characters'),
+    re_pass: z.string().min(1, 'Required'),
+    contact: z.string().min(1, 'Required'),
+    'agree-term': z.literal('on', { errorMap: () => ({ message: 'You must agree to the terms' }) }),
+  })
+  .refine(data => data.pass === data.re_pass, {
+    message: 'Passwords do not match',
+    path: ['re_pass'],
+  })
 
 const loginSchema = z.object({
-  email: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email address'),
+  username: z.string().min(1, 'Required'),
   password: z.string().min(1, 'Required'),
 })
 
@@ -22,7 +27,12 @@ export type AuthState = {
   success?: boolean
   message?: string
   errors?: {
+    name?: string[]
     email?: string[]
+    pass?: string[]
+    re_pass?: string[]
+    contact?: string[]
+    'agree-term'?: string[]
     username?: string[]
     password?: string[]
     form?: string[]
@@ -31,32 +41,25 @@ export type AuthState = {
 
 export async function register(prevState: AuthState, formData: FormData): Promise<AuthState> {
   const parsed = registerSchema.safeParse({
+    name: formData.get('name'),
     email: formData.get('email'),
-    username: formData.get('username'),
-    password: formData.get('password'),
+    pass: formData.get('pass'),
+    re_pass: formData.get('re_pass'),
+    contact: formData.get('contact'),
+    'agree-term': formData.get('agree-term'),
   })
 
   if (!parsed.success) {
     return { errors: flattenError(parsed.error).fieldErrors }
   }
 
-  const { email, username, password } = parsed.data
+  const { name, email, pass, contact } = parsed.data
   const supabase = await createClient()
-
-  const { data: existing } = await supabase
-    .from('profiles')
-    .select('username')
-    .eq('username', username)
-    .maybeSingle()
-
-  if (existing) {
-    return { errors: { username: ['Username is already taken'] } }
-  }
 
   const { error } = await supabase.auth.signUp({
     email,
-    password,
-    options: { data: { username } },
+    password: pass,
+    options: { data: { name, contact } },
   })
 
   if (error) {
@@ -70,7 +73,7 @@ export async function register(prevState: AuthState, formData: FormData): Promis
 
 export async function login(prevState: AuthState, formData: FormData): Promise<AuthState> {
   const parsed = loginSchema.safeParse({
-    email: formData.get('email'),
+    username: formData.get('username'),
     password: formData.get('password'),
   })
 
@@ -78,10 +81,20 @@ export async function login(prevState: AuthState, formData: FormData): Promise<A
     return { errors: flattenError(parsed.error).fieldErrors }
   }
 
-  const { email, password } = parsed.data
+  const { username, password } = parsed.data
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('email')
+    .eq('username', username)
+    .maybeSingle()
+
+  if (!profile?.email) {
+    return { errors: { username: ['Username not found'] } }
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({ email: profile.email, password })
 
   if (error) {
     return { errors: { form: [error.message] } }

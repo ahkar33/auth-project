@@ -9,8 +9,9 @@ const initial: AuthState = {}
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initial)
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [remember, setRemember] = useState(false)
 
   useEffect(() => {
     if (state.errors?.form) {
@@ -43,19 +44,19 @@ export default function LoginPage() {
           <form action={formAction} className="flex flex-col gap-5">
             <div>
               <label className="block text-xs font-semibold text-[var(--muted)] mb-2 tracking-wide">
-                Email
+                Your Name
               </label>
               <input
-                type="email"
-                name="email"
+                type="text"
+                name="username"
                 className="field-input"
-                placeholder="you@example.com"
-                autoComplete="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                placeholder="your_handle"
+                autoComplete="username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
               />
-              {state.errors?.email && (
-                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.email[0]}</p>
+              {state.errors?.username && (
+                <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.username[0]}</p>
               )}
             </div>
 
@@ -75,6 +76,20 @@ export default function LoginPage() {
               {state.errors?.password && (
                 <p className="mt-1.5 text-xs text-[var(--error)]">{state.errors.password[0]}</p>
               )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                id="remember-me"
+                name="remember-me"
+                checked={remember}
+                onChange={e => setRemember(e.target.checked)}
+                className="w-4 h-4 rounded border border-[var(--border)] bg-transparent accent-[var(--accent)] cursor-pointer"
+              />
+              <label htmlFor="remember-me" className="text-xs text-[var(--muted)] cursor-pointer">
+                Remember me
+              </label>
             </div>
 
             <button type="submit" disabled={pending} className="btn-primary mt-2">
