@@ -20,6 +20,8 @@ const loginSchema = z.object({
 })
 
 export type AuthState = {
+  success?: boolean
+  message?: string
   errors?: {
     email?: string[]
     username?: string[]
@@ -62,7 +64,9 @@ export async function register(prevState: AuthState, formData: FormData): Promis
     return { errors: { form: [error.message] } }
   }
 
-  redirect('/dashboard')
+  await supabase.auth.signOut()
+
+  return { success: true, message: 'Account created! You can now sign in.' }
 }
 
 export async function login(prevState: AuthState, formData: FormData): Promise<AuthState> {

@@ -23,57 +23,43 @@ export default async function DashboardPage() {
     : '—'
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="border-b border-[var(--border)] px-8 py-5 flex items-center justify-between">
-        <span className="text-[var(--gold)] text-xs tracking-[0.3em] uppercase">◆ Auth</span>
+    <div className="min-h-screen bg-[var(--bg)]">
+      <header className="border-b border-[var(--border)] bg-[var(--surface)] px-6 py-4 flex items-center justify-between">
+        <span className="text-xs tracking-[0.2em] uppercase text-[var(--muted)]">Auth</span>
         <form action={logout}>
           <button
             type="submit"
-            className="text-xs tracking-[0.15em] uppercase text-[var(--muted)] hover:text-[var(--text)] transition-colors"
+            className="text-xs text-[var(--muted)] hover:text-[var(--text)] transition-colors underline underline-offset-2"
           >
-            Sign Out →
+            Sign out
           </button>
         </form>
       </header>
 
-      {/* Content */}
-      <main className="flex-1 flex items-center justify-center px-8 py-16">
-        <div className="w-full max-w-lg">
-          <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-4">Dashboard</p>
+      <main className="max-w-md mx-auto px-4 py-16">
+        <p className="text-xs tracking-[0.2em] uppercase text-[var(--muted)] mb-2">Dashboard</p>
+        <h1 className="font-[family-name:var(--font-playfair)] text-3xl text-[var(--text)] mb-10">
+          Hello, {profile?.username ?? 'there'}.
+        </h1>
 
-          <h1 className="font-[family-name:var(--font-playfair)] text-4xl text-[var(--text)] mb-12">
-            Hello, {profile?.username ?? 'there'}.
-          </h1>
-
-          {/* Info card */}
-          <div className="relative border border-[var(--border)] p-8 space-y-6">
-            <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[var(--gold)] -translate-x-px -translate-y-px" />
-            <span className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[var(--gold)] translate-x-px -translate-y-px" />
-            <span className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[var(--gold)] -translate-x-px translate-y-px" />
-            <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[var(--gold)] translate-x-px translate-y-px" />
-
-            <Row label="Username" value={profile?.username ?? '—'} />
-            <div className="border-t border-[var(--border)]" />
-            <Row label="Email" value={user.email ?? '—'} />
-            <div className="border-t border-[var(--border)]" />
-            <Row label="Member Since" value={joined} />
-            <div className="border-t border-[var(--border)]" />
-            <Row label="User ID" value={user.id.slice(0, 8) + '…'} mono />
-          </div>
+        <div className="bg-[var(--surface)] border border-[var(--border)] shadow-sm divide-y divide-[var(--border)]">
+          <Row label="Username" value={profile?.username ?? '—'} />
+          <Row label="Email" value={user.email ?? '—'} />
+          <Row label="Member since" value={joined} />
+          <Row label="User ID" value={user.id.slice(0, 8) + '…'} dim />
         </div>
       </main>
     </div>
   )
 }
 
-function Row({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+function Row({ label, value, dim = false }: { label: string; value: string; dim?: boolean }) {
   return (
-    <div className="flex justify-between items-baseline gap-4">
-      <span className="text-[0.65rem] tracking-[0.2em] uppercase text-[var(--muted)] shrink-0">
+    <div className="flex justify-between items-baseline gap-4 px-5 py-4">
+      <span className="text-[0.65rem] tracking-[0.15em] uppercase text-[var(--muted)] shrink-0">
         {label}
       </span>
-      <span className={`text-sm text-[var(--text)] truncate ${mono ? 'opacity-60' : ''}`}>
+      <span className={`text-sm text-right truncate ${dim ? 'text-[var(--muted)]' : 'text-[var(--text)]'}`}>
         {value}
       </span>
     </div>
